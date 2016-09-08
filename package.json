@@ -1,0 +1,33 @@
+{
+    "name": "html-partials-compiler",
+    "version": "1.0.0",
+    "description": "Easily build a static html files by including html partials",
+    "main": "index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Tecktron/html-partials-compiler.git"
+    },
+    "keywords": [
+        "static",
+        "html",
+        "compile",
+        "concat",
+        "include",
+        "import",
+        "partials",
+        "replace",
+        "web"
+    ],
+    "author": "Tecktron",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Tecktron/html-partials-compiler/issues"
+    },
+    "homepage": "https://github.com/Tecktron/html-partials-compiler#readme",
+    "bin": {
+        "html-partials-compiler": "./index.js"
+    },
+    "dependencies": {
+        "commander": "^2.9.0"
+    }
+}
