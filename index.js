@@ -37,6 +37,10 @@ if (!program.file || !program.file.length){
     }
 }
 
+const openTag = '<!partial';
+const condAttr = 'cond';
+const srcAttr = 'src';
+
 var contents = fs.readFileSync(program.file).toString();
 var filepath = path.dirname(program.file);
 var found = 0;
@@ -55,7 +59,7 @@ function get_attrib(partial, attrib) {
 }
 
 while (found !== -1) {
-    found = contents.indexOf('<partial', found);
+    found = contents.indexOf(openTag, found);
     if (found === -1) {
         continue;
     }
@@ -66,7 +70,7 @@ while (found !== -1) {
     var partial = contents.slice(found, end).toString();
     if (use_conditionals === true) {
         var to_include = false;
-        var values = get_attrib(partial, 'cond');
+        var values = get_attrib(partial, condAttr);
         if (values !== null) {
             var conds = list(values);
             var len = conds.length;
@@ -84,7 +88,7 @@ while (found !== -1) {
             }
         }
     }
-    var src = get_attrib(partial, 'src');
+    var src = get_attrib(partial, srcAttr);
     var partial_contents = '';
     if (src !== null) {
         if (!path.isAbsolute(src)) {

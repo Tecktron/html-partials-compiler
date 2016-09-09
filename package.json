@@ -1,6 +1,6 @@
 {
     "name": "html-partials-compiler",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Easily build a static html file by including html partials",
     "main": "index.js",
     "repository": {

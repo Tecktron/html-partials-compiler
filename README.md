@@ -22,10 +22,10 @@ $ html-partials-compiler --cond comma,separated,list,of,conditions input.html
 ```
 You can then pipe the output to another file (as is shown in the examples below).
 
-In the html file (or any text file really), I decided to create a `<partial>` tag. So far I've found this to be unique so I don't interfere with any other packages that you may be using on the javascript side (I noticed a few that use include). 
-This tag will then be replaced with the `src` you provide based on the `cond` if you have supplied any.
+In the html file (or any text file really), I decided to create a `<!partial>` tag. So far I've found this to be unique so I don't interfere with any other packages that you may be using on the javascript side (I noticed a few that use include). I added in the extra <! as some editors complained about an unknown or unclosed tag without it and this side-stepped that validation. 
+This tag will be replaced with the `src` you provide based on the `cond` if you have supplied any.
 ```
-<partial src='./location/of/some/file.html' cond='optional'>
+<!partial src='./location/of/some/file.html' cond='optional'>
 ```
 
 #### Attribute details
@@ -34,9 +34,9 @@ This tag will then be replaced with the `src` you provide based on the `cond` if
 - `cond` - An _optional_ attribute containing a comma separated list of conditions. 
 - 
 
-The `cond` work by converting the list of conditions passed in to an array. This is also true for the attribute in the `<partial>`. The arrays are then matched against each other for a common value and if found, the partial will be included. If not, it will be removed.
-Here's an example of using a cond, using passing in: `--cond debug` will render `<partial src='...' cond='debug,staging'>`, 
-however, `<partial src='...' cond='prod,staging'>` would just be removed since the debug cond is not fulfilled.
+The `cond` work by converting the list of conditions passed in to an array. This is also true for the attribute in the `<!partial>`. The arrays are then matched against each other for a common value and if found, the partial will be included. If not, it will be removed.
+Here's an example of using a cond, using passing in: `--cond debug` will render `<!partial src='...' cond='debug,staging'>`, 
+however, `<!partial src='...' cond='prod,staging'>` would just be removed since the debug cond is not fulfilled.
 
 If no `--cond` parameters are pass in, all `cond` attributes will be ignored and all partials will be included.
 
@@ -69,11 +69,11 @@ File: `./html/partials/footer.html`
 
 File: `./html/index.html`
 ```
-<partial src="./partials/header.html">
+<!partial src="./partials/header.html">
 <body>
    <h1>Welcome to my website</h1>
    <p>Hello world, and welcome to my website.</p>
-<partial src="./partials/footer.html">
+<!partial src="./partials/footer.html">
 </body>
 </html>
 ```
@@ -114,13 +114,13 @@ File `./html/partials/debug.html`
 
 File: `./html/index.html`
 ```
-<partial src="./partials/header.html">
+<!partial src="./partials/header.html">
 <body>
    <h1>Welcome to my website</h1>
-   <partial src="./partials/prod_content.html" cond="prod">
+   <!partial src="./partials/prod_content.html" cond="prod">
    <p>Hello world, and welcome to my website.</p>
-<partial src="./partials/footer.html">
-<partial src="./partials/debug.html" cond="debug">
+<!partial src="./partials/footer.html">
+<!partial src="./partials/debug.html" cond="debug">
 </body>
 </html>
 ```
