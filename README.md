@@ -32,7 +32,6 @@ This tag will be replaced with the `src` you provide based on the `cond` if you 
     
 - `src` - The location of the partial to include. This can be a relative path based on the location of the input file or a full path. If a partial doesn't contain an `src` or the file cannot be found, it will simply be removed.
 - `cond` - An _optional_ attribute containing a comma separated list of conditions. 
-- 
 
 The `cond` work by converting the list of conditions passed in to an array. This is also true for the attribute in the `<!partial>`. The arrays are then matched against each other for a common value and if found, the partial will be included. If not, it will be removed.
 Here's an example of using a cond, using passing in: `--cond debug` will render `<!partial src='...' cond='debug,staging'>`, 
