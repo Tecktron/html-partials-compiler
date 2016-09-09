@@ -1,7 +1,7 @@
 {
     "name": "html-partials-compiler",
-    "version": "1.0.0",
-    "description": "Easily build a static html files by including html partials",
+    "version": "1.0.1",
+    "description": "Easily build a static html file by including html partials",
     "main": "index.js",
     "repository": {
         "type": "git",
@@ -16,6 +16,7 @@
         "import",
         "partials",
         "replace",
+        "build",
         "web"
     ],
     "author": "Tecktron",

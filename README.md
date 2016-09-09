@@ -4,7 +4,8 @@ Easily build a static html file by including html partials using npm.
 This is open source software. Your help, in any capacity, is greatly appreciated.
 
 ## Background & Purpose
-So, I've been using npm as a build tool, it's simplifies things not having to install grunt/gulp/etc. I was building a new multipage site and wanted to build the html files using reuseable partials to keep everything organized. The goal here, changing the common header in just one place, running the build and having the html files automatically updated. Seems like a basic idea, but I couldn't find an npm package to do just this, so I made one. I then wanted some very basic conditions avaliable, like if I'm building a `debug` build, I didn't want include a particular partial (in my case the google analytics code), so I added that in also.
+So I've been using npm as a build tool as I find it simplifies things not having to install grunt/gulp/etc. I was building a new multipage site and wanted to build the base html files using reusable partials to keep everything organized. My goal here is to change the common header in just one place, running the build and having the base html files updated. Seems like a basic idea, but I couldn't find an npm package to do just this, so I made one. 
+I then figured that wanted some very basic conditions available, like if I'm building a `debug` build, I didn't want include a particular partial (in my case the google analytics code), so I added that feature in also.
 
 Please note that this was not created as a runtime compiler. There are plenty of packages out there that do that sort of thing. This is a build tool and can actually be used on any text file. It's basically type of search and replace tool.
 
@@ -21,27 +22,29 @@ $ html-partials-compiler --cond comma,separated,list,of,conditions input.html
 ```
 You can then pipe the output to another file (as is shown in the examples below).
 
-In the html file (or any text file really), use a `<partial>` tag. It will then be replaced with the `src` you provide based on the `cond` if you have supplied one.
+In the html file (or any text file really), I decided to create a `<partial>` tag. So far I've found this to be unique so I don't interfere with any other packages that you may be using on the javascript side (I noticed a few that use include). 
+This tag will then be replaced with the `src` you provide based on the `cond` if you have supplied any.
 ```
 <partial src='./location/of/some/file.html' cond='optional'>
 ```
 
 #### Attribute details
     
-- `src` - The location of the partial to include. This can be a relative path based on the location of the input file or a full path. If a partial doesn't contain an src, it will simply be removed.
-- `cond` - An _optional_ comma separated list of conditionals. The items in cond are used in a logical OR fashion. Basically, the conditions are converted to an array, and if a value in one array is in the value of the other, it will be included.
+- `src` - The location of the partial to include. This can be a relative path based on the location of the input file or a full path. If a partial doesn't contain an `src` or the file cannot be found, it will simply be removed.
+- `cond` - An _optional_ attribute containing a comma separated list of conditions. 
+- 
 
-Here's an example of using a cond, using passing in: `cond debug` will render `<partial src='...' cond='debug,staging'>`, 
+The `cond` work by converting the list of conditions passed in to an array. This is also true for the attribute in the `<partial>`. The arrays are then matched against each other for a common value and if found, the partial will be included. If not, it will be removed.
+Here's an example of using a cond, using passing in: `--cond debug` will render `<partial src='...' cond='debug,staging'>`, 
 however, `<partial src='...' cond='prod,staging'>` would just be removed since the debug cond is not fulfilled.
 
-If no cond parameters are pass in, all cond params will be ignored and all partials will be included.
+If no `--cond` parameters are pass in, all `cond` attributes will be ignored and all partials will be included.
 
-If the `src` file cannot be found the partial will simply be removed.
 
 #### Notes
 
-- If you add in a partial with partials, those will also be parsed, however the base path will still be that of the input file, so be careful with your relative paths, if you choose to use this pattern (see the todo section below).
-- Avoid including a file within itself. You will end up in a recursive loop or it.
+- If you add in a partial containing partials, those will also end up be parsed, however the base path will still be that of the original input file, so be careful with your relative paths, if you choose to use this pattern (see the todo section below).
+- Avoid including a partial within itself. You will end up in a recursive loop.
 
 ## Examples
 
@@ -122,7 +125,7 @@ File: `./html/index.html`
 </html>
 ```
 
-Command: `$ html-partials-compliler --cond debug ./html/index.html > dist/index_debug.html`
+Command: `$ html-partials-compliler --cond debug ./html/index.html > ./dist/index_debug.html`
 
 Compiled file: `./dist/index_debug.html`
 ```
@@ -145,14 +148,14 @@ Compiled file: `./dist/index_debug.html`
 </html>
 ```
 
-If you passed in a different param, the the debug condition would be skipped and the resulting `dist/index_debug.html` would look the same as the the first compiled `dist/index.html` file.
-
 ## Contributing, Help & Requests
 If you need help, please feel free to create an issue or fork and make a PR. If you want to contribute, by all means, please make a fork and request a PR. If you want this for X task runner, then please feel free to write a wrapper for it. 
 
 If you're looking for feature X, please make sure it is within the scope of this project. For example, I'm _not_ going to add a mimify option since there are already great packages for that and you can simply pass them the output of this package.
 
 #### Todos
+
+* [ ] _Annotate code_ - Code could use some comments.
 
 * [ ] _Add in path recursion_ - As of current, in order to perform recursion, you need to either string the commands or adjust the paths to be that of the top file. It would be a nice feature to be able to have the app parse the partials on their level.
 

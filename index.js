@@ -5,12 +5,11 @@ const pkg = require('./package.json');
 const fs = require('fs');
 const path = require('path');
 
-var program = require('commander');
-var conditionals = [];
-
 function list(val) {
     return val.split(',');
 }
+
+var program = require('commander');
 
 program
 .version(pkg.version)
@@ -21,6 +20,9 @@ program
 })
 .parse(process.argv);
 
+var conditionals = [];
+var use_conditionals = false;
+
 if (!program.file || !program.file.length){
     program.help();
     process.exit(8);
@@ -30,11 +32,9 @@ if (!program.file || !program.file.length){
 } else {
     conditionals = program.cond;
     program.file = fs.realpathSync(program.file);
-}
-
-var use_conditionals = false;
-if (conditionals.length){
-    use_conditionals = true;
+    if (conditionals.length){
+        use_conditionals = true;
+    }
 }
 
 var contents = fs.readFileSync(program.file).toString();
@@ -68,9 +68,9 @@ while (found !== -1) {
         var to_include = false;
         var values = get_attrib(partial, 'cond');
         if (values !== null) {
-            var conds = values.split(',');
+            var conds = list(values);
             var len = conds.length;
-            if (len) {
+            if (len > 0) {
                 for (var x = 0; x < len; x++) {
                     if (conditionals.indexOf(conds[x]) != -1) {
                         to_include = true;
