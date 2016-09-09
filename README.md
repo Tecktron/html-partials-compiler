@@ -6,7 +6,7 @@ This is open source software. Your help, in any capacity, is greatly appreciated
 ## Background & Purpose
 So, I've been using npm as a build tool, it's simplifies things not having to install grunt/gulp/etc. I was building a new multipage site and wanted to build the html files using reuseable partials to keep everything organized. The goal here, changing the common header in just one place, running the build and having the html files automatically updated. Seems like a basic idea, but I couldn't find an npm package to do just this, so I made one. I then wanted some very basic conditions avaliable, like if I'm building a `debug` build, I didn't want include a particular partial (in my case the google analytics code), so I added that in also.
 
-Please note that this was not created as runtime compiler. There are plenty of packages out there that do that sort of thing. This is a build tool and can actually be used on any text file. It's basically type of search and replace tool.
+Please note that this was not created as a runtime compiler. There are plenty of packages out there that do that sort of thing. This is a build tool and can actually be used on any text file. It's basically type of search and replace tool.
 
 I hope that you find this a useful tool.
 
@@ -48,7 +48,7 @@ If the `src` file cannot be found the partial will simply be removed.
 ### Basic
 Simply include the files where you want them
 
-File: `./partials/header.html`
+File: `./html/partials/header.html`
 ```
 <!DOCTYPE html>
 <html>
@@ -57,14 +57,14 @@ File: `./partials/header.html`
     <title>My website</title>
 </head>
 ```
-File: `./partials/footer.html`
+File: `./html/partials/footer.html`
 ```
    <footer>
    &copy; <a href="mywebsite.example.com">My website</a>
    </footer>
 ```
 
-File: `index.html`
+File: `./html/index.html`
 ```
 <partial src="./partials/header.html">
 <body>
@@ -75,9 +75,9 @@ File: `index.html`
 </html>
 ```
 
-Command: `$ html-partials-compliler ./html/index.html > dist/index.html`
+Command: `$ html-partials-compliler ./html/index.html > ./dist/index.html`
 
-Compiled file: `dist/index.html`
+Compiled file: `./dist/index.html`
 ```
 <!DOCTYPE html>
 <html>
@@ -102,18 +102,19 @@ Also it's not limited to html. it will include any text based file, including js
 Conditionals are easy too. These are basically a yes/no set off passed in options.
 Lets add a script for debug purposes:
 
-File `./partials/debug.html`
+File `./html/partials/debug.html`
 ```
 <script type="text/javascript">
    console.log('Debug mode');
 </script>
 ```
 
-File: `index.html`
+File: `./html/index.html`
 ```
 <partial src="./partials/header.html">
 <body>
    <h1>Welcome to my website</h1>
+   <partial src="./partials/prod_content.html" cond="prod">
    <p>Hello world, and welcome to my website.</p>
 <partial src="./partials/footer.html">
 <partial src="./partials/debug.html" cond="debug">
@@ -123,7 +124,7 @@ File: `index.html`
 
 Command: `$ html-partials-compliler --cond debug ./html/index.html > dist/index_debug.html`
 
-Compiled file: `dist/index_debug.html`
+Compiled file: `./dist/index_debug.html`
 ```
 <!DOCTYPE html>
 <html>

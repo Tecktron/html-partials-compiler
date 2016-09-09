@@ -17,19 +17,19 @@ program
 .arguments('<file>')
 .option('--cond <cond>', 'A comma separated list of conditional names: --cond=debug,prod,staging', list, [])
 .action(function(file) {
-    program.file = fs.realpathSync(file);
-    conditionals = program.cond;
+    program.file = file;
 })
 .parse(process.argv);
 
 if (!program.file || !program.file.length){
     program.help();
     process.exit(8);
-}
-
-if (!fs.existsSync(program.file)) {
+} else if (!fs.existsSync(program.file)) {
     console.error("The input file could not be found.");
     process.exit(1);
+} else {
+    conditionals = program.cond;
+    program.file = fs.realpathSync(program.file);
 }
 
 var use_conditionals = false;
@@ -96,4 +96,4 @@ while (found !== -1) {
     }
     contents = contents.replace(partial, partial_contents);
 }
-console.log(contents);
+process.stdout.write(contents);
