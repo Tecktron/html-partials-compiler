@@ -54,7 +54,7 @@ var filepath = path.dirname(program.file);
 var found = 0;
 
 function get_attrib(partial, attrib) {
-    attrib += '=';
+    attrib = ' ' + attrib + '=';
     var attrib_len = attrib.length;
     var start = partial.indexOf(attrib);
     if (start === -1) {
