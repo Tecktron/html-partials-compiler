@@ -93,7 +93,7 @@ File: `./html/index.html`
 </html>
 ```
 
-Command: `$ html-partials-compliler ./html/index.html > ./dist/index.html`
+Command: `$ html-partials-compiler ./html/index.html > ./dist/index.html`
 
 Compiled file: `./dist/index.html`
 ```
@@ -140,7 +140,7 @@ File: `./html/index.html`
 </html>
 ```
 
-Command: `$ html-partials-compliler --cond debug ./html/index.html > ./dist/index_debug.html`
+Command: `$ html-partials-compiler --cond debug ./html/index.html > ./dist/index_debug.html`
 
 Compiled file: `./dist/index_debug.html`
 ```
@@ -197,7 +197,7 @@ File: `./html/index.html`
 </html>
 ```
 
-Command: `$ html-partials-compliler --cond prod ./html/index.html > ./dist/index.html`
+Command: `$ html-partials-compiler --cond prod ./html/index.html > ./dist/index.html`
 
 Compiled file: `./dist/index.html`
 ```
