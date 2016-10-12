@@ -5,7 +5,7 @@ This is open source software. Your help in any capacity, even a star, is greatly
 
 ## Background & Purpose
 So I've been using npm as a build tool as I find it simplifies things not having to install grunt/gulp/etc. I was building a new multipage site and wanted to build the base html files using reusable partials to keep everything organized. My goal here is to change the common header in just one place, running the build and having the base html files updated. Seems like a basic idea, but I couldn't find an npm package to do just this, so I made one. 
-I then figured that wanted some very basic conditions available, like if I'm building a `debug` build, I didn't want include a particular partial (in my case the google analytics code), so I added that feature in also. I also starting figuring that I wanted to inject some static content, but I wanted it minified before hand in certain situations so I've also implemented that as a very basic, albeit functional, feature. 
+I then figured that wanted some very basic conditions available, like if I'm building a `debug` build, I didn't want to include a particular partial (in my case the google analytics code), so I added that feature in also. I also starting figuring that I wanted to inject some static content, but I wanted it minified it before hand in certain situations so I've also implemented that as a very basic, albeit functional, feature. 
 
 Please note that this was not created as a runtime compiler. There are plenty of packages out there that do that sort of thing. This is a build tool and can actually be used on any text file. It's basically type of search and replace tool.
 
@@ -25,7 +25,7 @@ You can then pipe the output to another file (as is shown in the examples).
 
 #### In Your File:
 In the html file (or any text file really), I decided to create a `<!partial>` tag. 
-So far I've found this to be unique so I don't interfere with any other packages that you may be using on the javascript side (I noticed a few that use include). I added in the extra <! as some editors complained about an unknown or unclosed tag without it and this side-stepped that validation. 
+So far I've found this to be unique so I don't interfere with any other packages that you may be using on the javascript side (I noticed a few that use an `<include>` tag). I added in the extra <! as some editors complained about an unknown or unclosed tag without it and this side-stepped that validation. 
 This tag will be replaced with the `src` you provide based on the `cond` if you have supplied any and first process by any `run` present.
 
 ```
@@ -40,18 +40,18 @@ This tag will be replaced with the `src` you provide based on the `cond` if you 
 - `run-cond` - An _optional_ attribute containing a comma separated list of conditions in which the run command will be run. See notes on run below
 
 ##### Notes on cond
-The `cond` work by converting the list of conditions passed in to an array. This is also true for the attribute in the `<!partial>`. The arrays are then matched against each other for a common value and if found, the partial will be included. If not, it will be removed.
-Here's an example of using a cond, using passing in: `--cond debug` will render `<!partial src='...' cond='debug,staging'>`, however, `<!partial src='...' cond='prod,staging'>` would just be removed since the debug cond is not fulfilled.
+The `cond` works by converting the list of conditions passed in to an array. This is also true for the attribute in the `<!partial>`. The arrays are then matched against each other for a common value and if found, the partial will be included. If not, it will be removed.
+Here's an example of using a cond, passing in: `--cond debug` will render `<!partial src='...' cond='debug,staging'>`, however, `<!partial src='...' cond='prod,staging'>` would just be removed since the `debug` cond is not fulfilled.
 
 If no `--cond` parameters are passed in, all `cond` attributes will be ignored and all partials will be included.
-To have no conditionals included, simply pass in a value that has no matching partials and they will be skipped.
+To have no conditionals included, simply pass in a value that has no matching partials and they will all be skipped.
 
 ##### Notes on run
-The `run` option is _extremely_ simple and should only be used by other build tools (this one included) that output to the stdout. This works by simply appending a space and the partial filename (as full path) to the command, run as a shell command (`child_process.execSync`) and return the expected text output. Since this is done in a synchronous manner (see todos), it may hold up further operations if the command takes a long time to process.
+The `run` option is _extremely_ simple and should only be used by other build tools (this one included) that output to the stdout. This works by simply appending a space and the partial filename, as full path, to the command. For example `<!partial src="./example.json" run="json-minify">` will generate the command `json-minify /some/path/to/example.json` This command is then run as a shell command (`child_process.execSync`) and the expected text output is captured. Since this is done in a synchronous manner (see todos), it may hold up further operations if the command takes a long time to process
  
-The `run-cond` work the same was as the `cond` in how it's parsed (array against array), but is used only to determine if the run command will be run. If no `run-cond` is specified, the run command will always be executed if the partial is to be included. As with `cond` if no `--cond` param is passed in, `run` will always be executed.
+The `run-cond` works the same was as the `cond` in how it's parsed (array against array), but is used only to determine if the run command will be run. If no `run-cond` is specified, the run command will always be executed if the partial is to be included. As with `cond` if no `--cond` param is passed in, `run` will always be executed.
 
-An example of using this would be wanting to inject a piece of json into your html, but you want it minified before replacement. Please see the example below for more on this.
+An example of using this would be wanting to inject a piece of json or a svg into your html, but you want it minified before replacement. Please see the example below for more on this.
 I would not suggest running this on every partial in order to try and minify your html, I would recommend you pass the completed html to a minifier once it's been built.
 
 #### Additional Considerations
